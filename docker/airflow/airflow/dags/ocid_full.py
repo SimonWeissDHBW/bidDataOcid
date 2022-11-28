@@ -48,7 +48,7 @@ download_cell_towers = HttpDownloadOperator(
 
 unzip_cell_towers = UnzipFileOperator(
     task_id='unzip_cell_towers',
-    zip_file='/home/airflow/opencellid/raw/cell_towers.csv.gz',
+    zip_file='/home/airflow/opencellid/raw/cell_towers_full.csv.gz',
     extract_to='/home/airflow/opencellid/raw/cell_towers_full.csv',
     dag=dag,
 )
