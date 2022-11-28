@@ -1,9 +1,9 @@
 import pyspark
-from pyspark.sql import SparkSession
 from pyspark import SparkContext
-import argparse
 from pyspark.sql.functions import desc
 from pyspark.sql.types import *
+from pyspark.sql import SparkSession
+import argparse
 
 def get_args():
     """
@@ -54,18 +54,16 @@ if __name__ == '__main__':
         .options(header='true', delimiter=',', nullValue='null', inferschema='true')\
         .schema(schema)\
         .load(args.hdfs_source_dir + fileName)
-        # .load('/user/hadoop/opencellid/test/cell_diff.csv')
         
-    # cell_tower_dataframe = cell_tower_dataframe.select("radio", "lat", "lon", "range")
+    cell_tower_dataframe = cell_tower_dataframe.repartition('radio')
 
     cell_tower_dataframe\
-        .repartition('radio')\
         .write.format("parquet")\
         .mode(writeMode).option("path", args.hdfs_target_dir)\
         .partitionBy("radio")\
         .saveAsTable("default")\
 
-
+    cell_tower_dataframe = cell_tower_dataframe.select("radio", "mcc", "lat", "lon", "range", "averageSignal")
 
     print("MOINSEN")
     cell_tower_dataframe.write.format('jdbc').options(
