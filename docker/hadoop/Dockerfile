@@ -1,0 +1,1 @@
+FROM marcelmittelstaedt/spark_base:latest
