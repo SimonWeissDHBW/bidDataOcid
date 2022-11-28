@@ -1,0 +1,39 @@
+version: '3'
+services:
+    airflow:
+        image: 'marcelmittelstaedt/airflow:latest'
+        container_name: airflow
+        build:
+          context: ./airflow
+          dockerfile: Dockerfile
+        ports:
+            - '8080:8080'
+        restart: 'always'
+    hadoop:
+        image: 'marcelmittelstaedt/spark_base:latest'
+        container_name: hadoop
+        build:
+          context: ./hadoop
+          dockerfile: Dockerfile        
+        ports:
+            - '8030:8030'
+            - '8031:8031'
+            - '9000:9000'
+            - '8888:8888'
+            - '8088:8088'
+            - '9870:9870'
+            - '9864:9864'
+            - '10000:10000'
+            - '8032:8032'
+        restart: 'always'
+    mysql:
+        image: 'mysql:latest'
+        container_name: ocid
+        build:
+          context: ./mysql
+          dockerfile: Dockerfile
+        environment:
+            - MYSQL_ROOT_PASSWORD=ocidBigData
+        ports:
+            - "3306:3306"
+        restart: 'always'

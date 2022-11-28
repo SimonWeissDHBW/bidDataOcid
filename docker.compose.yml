@@ -1,0 +1,21 @@
+version: '3'
+services:
+    airflow:
+        image: 'marcelmittelstaedt/airflow:latest'
+        container_name: airflow
+        ports:
+            - '8080:8080'
+        restart: 'always'
+    hadoop:
+        image: 'marcelmittelstaedt/spark_base:latest'
+        container_name: hadoop     
+        ports:
+            - '9870:9870'
+            - '8888:8888'
+        restart: 'always'
+    mysql:
+        image: 'mysql:latest'
+        container_name: ocid
+        environment:
+            - MYSQL_ROOT_PASSWORD=ocidBigData
+        restart: 'always'
