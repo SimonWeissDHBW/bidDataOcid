@@ -14,4 +14,7 @@ module.exports = defineConfig({
     port: 3000,
     proxy: 'http://localhost/cell_towers',
   },
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+ }
 })
