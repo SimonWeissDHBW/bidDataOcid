@@ -18,11 +18,11 @@ app.use(cors())
 
 app.use('/cellTowers', cellTowersRouter);
 
-app.use(express.static(process.cwd() + '/dist'));
+app.use(express.static('/express_backend/dist'));
 
-// app.get('/', (req,res) => {
-//   res.sendFile('/express_backend/dist/index.html');
-// });
+app.get('/', (req,res) => {
+  res.sendFile('/express_backend/dist/index.html');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
