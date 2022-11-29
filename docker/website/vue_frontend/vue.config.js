@@ -10,11 +10,4 @@ module.exports = defineConfig({
       rtlSupport: false
     }
   },
-  devServer: {
-    port: 3000,
-    proxy: 'http://localhost',
-  },
-  headers: {
-    "Access-Control-Allow-Origin": "*",
- }
 })

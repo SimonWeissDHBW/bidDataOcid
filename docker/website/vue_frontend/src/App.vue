@@ -9,26 +9,19 @@
       </q-toolbar>
     </q-header>
     <q-page-container>
-      <HelloWorld />
+      <MainPage />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { ref } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import MainPage from './components/MainPage.vue'
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    HelloWorld
+    MainPage
   },
-
-  setup () {
-    return {
-      leftDrawerOpen: ref(false)
-    }
-  }
 }
 </script>

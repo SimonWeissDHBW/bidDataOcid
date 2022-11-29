@@ -50,7 +50,7 @@ import { ref } from 'vue'
 
 
 export default {
-  name: 'HelloWorld',
+  name: 'MainPage',
   data() {
     return {
       rows: [],
@@ -70,7 +70,7 @@ export default {
       this.rows = [];
       for (let i in this.group){
         console.log(this.group[i])
-        this.rows = this.rows.concat(await fetch("http://"+ self.location.host + ":3000/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+        this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
           console.log(data.data)
