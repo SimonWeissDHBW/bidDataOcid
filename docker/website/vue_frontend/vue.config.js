@@ -12,8 +12,6 @@ module.exports = defineConfig({
   },
   devServer: {
     port: 3000,
-    ws: true,
-    changeOrigin: true,
     proxy: 'http://localhost',
   },
   headers: {
