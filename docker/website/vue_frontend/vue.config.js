@@ -11,6 +11,6 @@ module.exports = defineConfig({
     }
   },
   devServer: {
-    proxy: 'localhost:3000',
+    proxy: 'http://localhost:3000/cell_towers',
   },
 })
