@@ -1,4 +1,4 @@
-FROM node:14 AS UI
+FROM node:16 AS UI
 
 COPY vue_frontend/ ./vue_frontend/
 
