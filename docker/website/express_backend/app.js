@@ -8,7 +8,7 @@ const port = 3000
 const cellTowersRouter = require('./routes/cellTowers')
 
 db = mysql_connector.createConnection({
-    host : 'localhost',
+    host : 'ocid',
     user : 'root',
     password  :'ocidBigData',
     database : 'cell_towers'
