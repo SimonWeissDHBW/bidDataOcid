@@ -20,9 +20,9 @@ app.use('/cellTowers', cellTowersRouter);
 
 app.use(express.static(process.cwd() + '/dist'));
 
-app.get('/', (req,res) => {
-  res.sendFile('/express_backend/dist/index.html');
-});
+// app.get('/', (req,res) => {
+//   res.sendFile('/express_backend/dist/index.html');
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
