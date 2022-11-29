@@ -56,6 +56,8 @@ if __name__ == '__main__':
         .load(args.hdfs_source_dir + fileName)
         
     cell_tower_dataframe = cell_tower_dataframe.repartition('radio')
+    
+    # cell_tower_dataframe = cell_tower_dataframe.where()
 
     cell_tower_dataframe\
         .write.format("parquet")\
