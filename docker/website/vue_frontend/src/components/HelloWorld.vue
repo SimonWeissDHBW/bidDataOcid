@@ -70,9 +70,7 @@ export default {
       this.rows = [];
       for (let i in this.group){
         console.log(this.group[i])
-        // console.log("http://localhost:3000/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
-        this.rows = this.rows.concat(await fetch("http://localhost:3000/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
-        // this.rows = await fetch("http://localhost:3000/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+        this.rows = this.rows.concat(await fetch("http://self.location.host:3000/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
           console.log(data.data)
