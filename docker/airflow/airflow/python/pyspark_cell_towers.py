@@ -71,4 +71,4 @@ if __name__ == '__main__':
         driver='com.mysql.cj.jdbc.Driver',
         dbtable='towers',
         user='root',
-        password='bigD').mode(writeMode).save()
+        password='ocidBigData').mode(writeMode).save()

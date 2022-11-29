@@ -39,12 +39,12 @@ clear_local_import_dir = ClearDirectoryOperator(
     dag=dag,
 )
 
-# download_cell_towers = HttpDownloadOperator(
-#     task_id='download_cell_towers',
-#     download_uri='https://opencellid.org/ocid/downloads?token=pk.fda3225a822fea93e9da4e4c6ba0c9ed&type=full&file=cell_towers.csv.gz', #muss durch die offizielle URL getauscht werden!
-#     save_to='/home/airflow/opencellid/raw/cell_towers_full.csv.gz',
-#     dag=dag,
-# )
+download_cell_towers = HttpDownloadOperator(
+    task_id='download_cell_towers',
+    download_uri='https://onedrive.live.com/download?cid=6CD9C3F4D2E50BCB&resid=6CD9C3F4D2E50BCB%2159290&authkey=AMinp5rC36d7X4k', #muss durch die offizielle URL getauscht werden!
+    save_to='/home/airflow/opencellid/raw/cell_towers_full.csv.gz',
+    dag=dag,
+)
 
 unzip_cell_towers = UnzipFileOperator(
     task_id='unzip_cell_towers',
@@ -88,5 +88,5 @@ pyspark_cell_towers = SparkSubmitOperator(
 
 # -------------------- Workflow --------------------
 
-create_local_import_dir >> clear_local_import_dir >> unzip_cell_towers
+create_local_import_dir >> clear_local_import_dir >>  download_cell_towers >> unzip_cell_towers
 unzip_cell_towers >> create_hdfs_cell_towers_partition_dir >> hdfs_put_tower_cells >> pyspark_cell_towers
