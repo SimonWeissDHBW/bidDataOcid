@@ -1,14 +1,5 @@
 version: '3'
-services:
-    website:
-        image: node:10
-        container_name: website
-        build:
-            context: ./website
-            dockerfile: Dockerfile
-        ports:
-            - "3000:3000"
-        restart: 'always'    
+services:  
     airflow:
         image: 'marcelmittelstaedt/airflow:latest'
         container_name: airflow
@@ -46,3 +37,12 @@ services:
         ports:
             - "3306:3306"
         restart: 'always'
+    website:
+        image: node:10
+        container_name: website
+        build:
+            context: ./website
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        restart: 'always'  
