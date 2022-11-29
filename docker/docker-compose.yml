@@ -1,24 +1,14 @@
 version: '3'
 services:
-    frontend:
+    website:
         image: node:10
-        container_name: vue_frontend
+        container_name: website
         build:
-            context: ./frontend
+            context: ./website
             dockerfile: Dockerfile
         ports:
             - "3000:3000"
         restart: 'always'    
-        
-    backend:
-        image: node:10
-        container_name: express_backend
-        build:
-            context: ./backend
-            dockerfile: Dockerfile
-        ports:
-            - "8000:8000"
-        restart: 'always'
     airflow:
         image: 'marcelmittelstaedt/airflow:latest'
         container_name: airflow
