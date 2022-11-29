@@ -1,4 +1,4 @@
-FROM node:10 AS UI
+FROM node:14 AS UI
 
 COPY vue_frontend/ ./vue_frontend/
 
@@ -6,7 +6,7 @@ RUN cd vue_frontend && npm install && npm run build
 
 EXPOSE 8080
 
-FROM node:10 AS server
+FROM node:14 AS server
 
 COPY express_backend/ ./express_backend/
 COPY --from=ui ./vue_frontend/dist/ ./express_backend/dist/
