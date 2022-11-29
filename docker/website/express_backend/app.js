@@ -21,7 +21,7 @@ app.use('/cellTowers', cellTowersRouter);
 app.use(express.static(process.cwd() + '/dist'));
 
 app.get('/', (req,res) => {
-  res.sendFile(express.static(process.cwd()) + '/dist/index.html');
+  res.sendFile('/express_backend/dist/index.html');
 });
 
 app.listen(port, () => {
