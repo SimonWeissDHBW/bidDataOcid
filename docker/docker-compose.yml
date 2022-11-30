@@ -38,7 +38,7 @@ services:
             - "3306:3306"
         restart: 'always'
     website:
-        image: node:10
+        image: node:16
         container_name: website
         build:
             context: ./website

@@ -69,11 +69,9 @@ export default {
     async getAPI() {
       this.rows = [];
       for (let i in this.group){
-        console.log(this.group[i])
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
-          console.log(data.data)
           return data.data
         }));
       }
@@ -82,19 +80,19 @@ export default {
 setup () {
   const columns = [
     { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true },
-    { name: 'mcc', label: 'MCC (Mobile Country Code)', field: 'mcc', sortable: true },
-    { name: 'net', label: 'Net', field: 'net' },
-    { name: 'area', label: 'Area', field: 'area' },
-    { name: 'cell', label: 'Cell', field: 'cell' },
-    { name: 'unit', label: 'Unit', field: 'unit' },
-    { name: 'lon', label: 'Longitude', field: 'lon' },
-    { name: 'lat', label: 'Latitude', field: 'lat' },
-    { name: 'range', label: 'Range', field: 'range' },
-    { name: 'samples', label: 'Samples', field: 'samples', sortable: true},
-    { name: 'changeable', label: 'Changeable', field: 'changeable'},
-    { name: 'created', label: 'Created', field: 'created'},
-    { name: 'updated', label: 'Updated', field: 'updated'},
-    { name: 'averageSignal', label: 'Average Signal', field: 'averageSignal'},
+    { name: 'distance', label: 'Distance', field: 'distance', sortable: true },
+    // { name: 'net', label: 'Net', field: 'net' },
+    // { name: 'area', label: 'Area', field: 'area' },
+    // { name: 'cell', label: 'Cell', field: 'cell' },
+    // { name: 'unit', label: 'Unit', field: 'unit' },
+    // { name: 'lon', label: 'Longitude', field: 'lon' },
+    // { name: 'lat', label: 'Latitude', field: 'lat' },
+    // { name: 'range', label: 'Range', field: 'range' },
+    // { name: 'samples', label: 'Samples', field: 'samples', sortable: true},
+    // { name: 'changeable', label: 'Changeable', field: 'changeable'},
+    // { name: 'created', label: 'Created', field: 'created'},
+    // { name: 'updated', label: 'Updated', field: 'updated'},
+    // { name: 'averageSignal', label: 'Average Signal', field: 'averageSignal'},
   ]
 
 
