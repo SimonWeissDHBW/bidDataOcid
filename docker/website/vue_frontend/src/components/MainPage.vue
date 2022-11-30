@@ -1,16 +1,17 @@
 <template>
   <div style="display:flex; flex-direction: column; align-items: center;">
       <div class="q-pa-md" style="width: 75%">
+        <!-- Table which changes its colum color depending on Distance value -->
       <q-table
-        title="Treats"
+        title="Cell Tower Signal Data"
         :rows="rows"
         :columns="columns"
         row-key="name"
         dark
         color="amber"
-      />
+      >
+      </q-table>
     </div>
-
       
     <div style="display:flex; flex-direction: column; align-items: center; width: 40%;">
       <q-input color="orange" standout bottom-slots v-model="lon" label="Longitude">
@@ -29,7 +30,7 @@
         <q-option-group
           v-model="group"
           :options="options"
-          color="red"
+          color="orange"
           center-label
           type="toggle"
         />
@@ -48,12 +49,12 @@
 <script>
 import { ref } from 'vue'
 
-
 export default {
   name: 'MainPage',
   data() {
     return {
       rows: [],
+      test: 0,
       lon: 0.0,
       lat: 0.0,
       group: ref(['UMTS']),
@@ -62,12 +63,12 @@ export default {
         {label : 'LTE', value: 'LTE'},
         {label : 'GSM', value: 'GSM'},
         {label : 'CDMA', value: 'CDMA'},
-      ]
+      ],
     }
   },
+
   methods: {
     async getAPI() {
-      this.rows = [];
       for (let i in this.group){
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
@@ -77,30 +78,16 @@ export default {
       }
     }
   },
-setup () {
-  const columns = [
-    { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true },
-    { name: 'distance', label: 'Distance', field: 'distance', sortable: true },
-    // { name: 'net', label: 'Net', field: 'net' },
-    // { name: 'area', label: 'Area', field: 'area' },
-    // { name: 'cell', label: 'Cell', field: 'cell' },
-    // { name: 'unit', label: 'Unit', field: 'unit' },
-    // { name: 'lon', label: 'Longitude', field: 'lon' },
-    // { name: 'lat', label: 'Latitude', field: 'lat' },
-    // { name: 'range', label: 'Range', field: 'range' },
-    // { name: 'samples', label: 'Samples', field: 'samples', sortable: true},
-    // { name: 'changeable', label: 'Changeable', field: 'changeable'},
-    // { name: 'created', label: 'Created', field: 'created'},
-    // { name: 'updated', label: 'Updated', field: 'updated'},
-    // { name: 'averageSignal', label: 'Average Signal', field: 'averageSignal'},
-  ]
 
-
-
-  return {
-    columns,
-
-  }
+  setup () {
+    const backGroundFunc =  ((row) =>  {return "bg-" + (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red"))})
+    const columns = [
+      { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
+      { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
+    ]
+    return {
+      columns,
+    }
   }
 }
 
