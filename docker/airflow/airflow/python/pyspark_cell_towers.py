@@ -60,28 +60,38 @@ if __name__ == '__main__':
         .select("radio", "lat", "lon", "range")\
         .dropDuplicates()\
         .dropna()\
-        .filter((
-            (cell_tower_dataframe.radio == "LTE") |
-            (cell_tower_dataframe.radio == "CDMA") |
-            (cell_tower_dataframe.radio == "GSM") |
-            (cell_tower_dataframe.radio == "UTMS") 
-        ))\
+        # .filter((
+        #     (cell_tower_dataframe.radio == "LTE") |
+        #     (cell_tower_dataframe.radio == "CDMA") |
+        #     (cell_tower_dataframe.radio == "GSM") |
+        #     (cell_tower_dataframe.radio == "UTMS") 
+        # ))\
+
+    df_lte = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "LTE")
+    df_cdma = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "CDMA")
+    df_gsm = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "GSM")
+    df_umts = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "UMTS")
+
+    df_partioned_by_radio = [[df_lte, "lte"], [df_cdma, "cdma"], [df_gsm, "gsm"], [df_umts,"umts"]]
     
     # cell_tower_dataframe = cell_tower_dataframe.where()
 
     cell_tower_dataframe\
         .write.format("parquet")\
         .mode(writeMode).option("path", args.hdfs_target_dir)\
+        .partitionBy("radio")\
         .saveAsTable("default")\
 
-        # .partitionBy("radio")\
+        # 
 
     cell_tower_dataframe = cell_tower_dataframe.select("radio", "lat", "lon", "range")
 
     print("MOINSEN")
-    cell_tower_dataframe.write.format('jdbc').options(
-        url='jdbc:mysql://ocid:3306/cell_towers',
-        driver='com.mysql.cj.jdbc.Driver',
-        dbtable='towers',
-        user='root',
-        password='ocidBigData').partitionBy("radio").mode(writeMode).save()
+
+    for df_radio in df_partioned_by_radio:
+        df_radio[0].write.format('jdbc').options(
+            url='jdbc:mysql://ocid:3306/cell_towers',
+            driver='com.mysql.cj.jdbc.Driver',
+            dbtable='towers_' + df_radio[1],
+            user='root',
+            password='ocidBigData').partitionBy("radio").mode(writeMode).save()

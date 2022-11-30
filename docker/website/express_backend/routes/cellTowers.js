@@ -8,11 +8,7 @@ router.get('/:radio/:lonParam/:latParam', function(req, res) {
   let sql = `SELECT MIN(st_distance_Sphere(point(TowersInRange.lon, TowersInRange.lat), point(${req.params.lonParam}, ${req.params.latParam}))) AS distance, TowersInRange.radio FROM 
 	(SELECT radio, lon, lat  FROM towers WHERE radio = '${req.params.radio}' AND st_distance_Sphere(point(lon, lat), point(${req.params.lonParam}, ${req.params.latParam})) <= towers.range) TowersInRange
   GROUP BY radio`;
-
-  // SELECT * FROM towers WHERE st_distance_Sphere(point(lon, lat), point(${req.params.lonParam}, ${req.params.latParam})) =
-	// (SELECT MIN(st_distance_Sphere(point(TowersInRange.lon, TowersInRange.lat), point(${req.params.lonParam}, ${req.params.latParam}))) AS DISTANCE FROM 
-	// 	(SELECT radio, lon, lat  FROM towers WHERE radio = "UMTS" AND st_distance_Sphere(point(lon, lat), point(${req.params.lonParam}, ${req.params.latParam})) <= towers.range) TowersInRange)
-
+  
   console.log(sql)
   queryDB(sql, res);
 });
