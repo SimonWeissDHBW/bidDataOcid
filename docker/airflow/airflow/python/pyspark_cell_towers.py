@@ -60,7 +60,12 @@ if __name__ == '__main__':
         .select("radio", "lat", "lon", "range")\
         .dropDuplicates()\
         .dropna()\
-        .filter((cell_tower_dataframe.radio == "LTE" | "UMTS" | "CDMA" | "GSM"))\
+        .filter((
+            (cell_tower_dataframe.radio == "LTE") |
+            (cell_tower_dataframe.radio == "CDMA") |
+            (cell_tower_dataframe.radio == "GSM") |
+            (cell_tower_dataframe.radio == "UTMS") 
+        ))\
     
     # cell_tower_dataframe = cell_tower_dataframe.where()
 
