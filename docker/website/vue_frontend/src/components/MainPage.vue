@@ -1,6 +1,6 @@
 <template>
-  <div style="display:flex; flex-direction: column;">
-      <div class="q-pa-md">
+  <div style="display:flex; flex-direction: column; align-items: center;">
+      <div class="q-pa-md" style="width: 75%">
       <q-table
         title="Treats"
         :rows="rows"
@@ -12,7 +12,7 @@
     </div>
 
       
-    <div width="25%" style="width: 50%;">
+    <div style="display:flex; flex-direction: column; align-items: center; width: 40%;">
       <q-input color="orange" standout bottom-slots v-model="lon" label="Longitude">
         <template v-slot:prepend>
           <q-icon name="place" />
@@ -25,17 +25,17 @@
         </template>
       </q-input>
 
-      <div class="q-pa-lg">
+      <div class="q-pa-lg" style="display:flex; flex-direction: column; align-items: center;">
         <q-option-group
           v-model="group"
           :options="options"
           color="red"
-          left-label
-          type="checkbox"
+          center-label
+          type="toggle"
         />
       </div>
 
-      <q-btn color="primary" label="Calculate" @click="getAPI()" />
+      <q-btn color="primary" label="Get Cell Data" @click="getAPI()" />
 
     </div>
  

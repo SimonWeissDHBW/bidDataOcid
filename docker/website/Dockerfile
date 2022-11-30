@@ -4,8 +4,6 @@ COPY ./vue_frontend/ ./vue_frontend/
 
 RUN cd vue_frontend && npm install && npm run build
 
-EXPOSE 8080
-
 FROM node:16 AS SERVER
 
 COPY ./express_backend/ ./express_backend/

@@ -55,7 +55,7 @@ if __name__ == '__main__':
         .schema(schema)\
         .load(args.hdfs_source_dir + fileName)
         
-    cell_tower_dataframe = cell_tower_dataframe.repartition('radio')
+    # cell_tower_dataframe = cell_tower_dataframe.repartition('radio')
     
     # cell_tower_dataframe = cell_tower_dataframe.where()
 
@@ -73,4 +73,4 @@ if __name__ == '__main__':
         driver='com.mysql.cj.jdbc.Driver',
         dbtable='towers',
         user='root',
-        password='ocidBigData').mode(writeMode).save()
+        password='ocidBigData').partitionBy("radio").mode(writeMode).save()
