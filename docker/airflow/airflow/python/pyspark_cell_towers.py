@@ -55,17 +55,23 @@ if __name__ == '__main__':
         .schema(schema)\
         .load(args.hdfs_source_dir + fileName)
         
-    # cell_tower_dataframe = cell_tower_dataframe.repartition('radio')
+    cell_tower_dataframe = cell_tower_dataframe\
+        .repartition('radio')\
+        .select("radio", "lat", "lon", "range")\
+        .dropDuplicates()\
+        .dropna()\
+        .filter((cell_tower_dataframe.radio == "LTE" | "UMTS" | "CDMA" | "GSM"))\
     
     # cell_tower_dataframe = cell_tower_dataframe.where()
 
     cell_tower_dataframe\
         .write.format("parquet")\
         .mode(writeMode).option("path", args.hdfs_target_dir)\
-        .partitionBy("radio")\
         .saveAsTable("default")\
 
-    cell_tower_dataframe = cell_tower_dataframe.select("radio", "mcc", "lat", "lon", "range", "averageSignal")
+        # .partitionBy("radio")\
+
+    cell_tower_dataframe = cell_tower_dataframe.select("radio", "lat", "lon", "range")
 
     print("MOINSEN")
     cell_tower_dataframe.write.format('jdbc').options(
