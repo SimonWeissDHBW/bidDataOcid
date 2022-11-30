@@ -72,7 +72,7 @@ if __name__ == '__main__':
     df_gsm = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "GSM")
     df_umts = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "UMTS")
 
-    df_partioned_by_radio = [[df_lte, "lte"], [df_cdma, "cdma"], [df_gsm, "gsm"], [df_umts,"umts"]]
+    df_partioned_by_radio = [[df_lte, "LTE"], [df_cdma, "CDMA"], [df_gsm, "GSM"], [df_umts,"UMTS"]]
     
     # cell_tower_dataframe = cell_tower_dataframe.where()
 
