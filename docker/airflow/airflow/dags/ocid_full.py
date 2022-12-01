@@ -1,30 +1,26 @@
-# -*- coding: utf-8 -*-
-
 """
-Title: Cell Towers Dag
+Title: Full Cell Towers Dag
 Author: Simon Weiss
-Description: Download and creation auf Full Cell Towers Csv in HDFS and MySQL
+Description: Downloads, Entpackt und kopiert Full Cell Towers nach HDFS
 """
 
-from datetime import datetime
 from airflow import DAG
+from datetime import datetime
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.dummy_operator import DummyOperator
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 from airflow.operators.http_download_operations import HttpDownloadOperator
 from airflow.operators.zip_file_operations import UnzipFileOperator
 from airflow.operators.hdfs_operations import HdfsPutFileOperator, HdfsMkdirFileOperator
-from airflow.operators.filesystem_operations import ClearDirectoryOperator
 
 args = {
     'owner': 'airflow'
 }
 
 dag = DAG('cell_towers_create_full_db', default_args=args, description='Project',
-          schedule_interval='56 18 * * *',
-          start_date=datetime(2022, 11, 21), catchup=False, max_active_runs=1)
+          schedule_interval='@once',
+          start_date=datetime(2022, 12, 1), catchup=False, max_active_runs=1)
 
-# ----------- Hadoop Filesystem Aufgaben ----------
+# ---Dags for Full Cell Towers---
 
 create_download_dir_full = BashOperator(
     task_id='create_import_dir',
@@ -75,11 +71,7 @@ pyspark_cell_towers_full = SparkSubmitOperator(
     dag = dag
 )
 
-# ---------------------------------------------------------------------------------------------
-
-
-
-# -------------------- Workflow --------------------
+# ---Workflow----
 
 create_download_dir_full >>  download_cell_towers_full >> unzip_cell_towers_full
 unzip_cell_towers_full >> create_hdfs_raw_dir_full >> hdfs_put_cell_towers_full >> pyspark_cell_towers_full

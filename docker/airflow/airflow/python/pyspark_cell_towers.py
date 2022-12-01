@@ -1,21 +1,20 @@
+import argparse
 import pyspark
 from pyspark import SparkContext
 from pyspark.sql.functions import desc
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
-import argparse
+
 
 def get_args():
-    """
-    Parses Command Line Args
-    """
-    parser = argparse.ArgumentParser(description='A spark job saving the cell-towers data in the hdfs and putting it into a MySQL database.')
+    parser = argparse.ArgumentParser(description='A spark job saving the partitioned cell-towers data in the hdfs and putting it into a MySQL database.')
     parser.add_argument('--hdfs_source_dir', help='HDFS source directory', required=True, type=str)
     parser.add_argument('--hdfs_target_dir', help='HDFS target directory', required=True, type=str)
     parser.add_argument('--hdfs_target_format', help='HDFS target format', required=True, type=str)
     parser.add_argument('--full_or_diff', help='Wether full or diff table is used', required=True, type=str)
     return parser.parse_args()
 
+# --- Main program ---
 if __name__ == '__main__':
 
     args = get_args()
@@ -48,7 +47,6 @@ if __name__ == '__main__':
     else:
         fileName = "/cell_towers_diff.csv"
         writeMode = "append"
-
 
     cell_tower_dataframe = spark.read.format('csv')\
         .options(header='true', delimiter=',', nullValue='null', inferschema='true')\

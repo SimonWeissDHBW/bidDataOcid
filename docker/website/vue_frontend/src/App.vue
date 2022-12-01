@@ -21,7 +21,6 @@ import MainPage from './components/MainPage.vue'
 
 export default {
   name: 'LayoutDefault',
-
   components: {
     MainPage
   },

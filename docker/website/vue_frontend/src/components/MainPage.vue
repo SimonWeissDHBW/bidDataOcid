@@ -1,7 +1,6 @@
 <template>
   <div style="display:flex; flex-direction: column; align-items: center;">
       <div class="q-pa-md" style="width: 75%">
-        <!-- Table which changes its colum color depending on Distance value -->
       <q-table
         title="Cell Tower Signal Data"
         :rows="rows"
@@ -12,20 +11,17 @@
       >
       </q-table>
     </div>
-      
     <div style="display:flex; flex-direction: column; align-items: center; width: 40%;">
       <q-input color="orange" standout bottom-slots v-model="lon" label="Longitude">
         <template v-slot:prepend>
           <q-icon name="place" />
         </template>
       </q-input>
-
       <q-input color="orange" standout bottom-slots v-model="lat" label="Latitude">
         <template v-slot:prepend>
           <q-icon name="place" />
         </template>
       </q-input>
-
       <div class="q-pa-lg" style="display:flex; flex-direction: column; align-items: center;">
         <q-option-group
           v-model="group"
@@ -48,11 +44,8 @@
       </template>
       </q-option-group>
       </div>
-
       <q-btn color="primary" label="Get Cell Data" @click="getAPI()" />
-
     </div>
- 
   </div>
 </template>
 
@@ -92,7 +85,7 @@ export default {
             this.options.find(x => x.value === this.group[i]).loading = false;
             let tempDistance = (data.data[0].length != 0) ? Math.round(data.data[0]) : NaN;
             this.rows = this.rows.concat([{radio: this.group[i], distance: tempDistance}]);
-            
+
           }
         );
       }
@@ -110,5 +103,4 @@ export default {
     }
   }
 }
-
 </script>

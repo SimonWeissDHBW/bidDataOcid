@@ -1,29 +1,26 @@
-# -*- coding: utf-8 -*-
-
 """
-Title: Cell Towers Diff Dag 
+Title: Diff Cell Towers Diff Dag 
 Author: Simon Weiss
-Description: Download and creation auf Diff Cell Towers Csv in HDFS and MySQL
+Description: Downloaded, Entpackt und kopiert Diff Cell Towers nach HDFS
 """
 
-from datetime import datetime
 from airflow import DAG
+from datetime import datetime
 from airflow.operators.bash_operator import BashOperator
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 from airflow.operators.http_download_operations import HttpDownloadOperator
 from airflow.operators.zip_file_operations import UnzipFileOperator
 from airflow.operators.hdfs_operations import HdfsPutFileOperator, HdfsMkdirFileOperator
-from airflow.operators.filesystem_operations import ClearDirectoryOperator
 
 args = {
     'owner': 'airflow'
 }
 
 dag = DAG('cell_towers_add_diff_db', default_args=args, description='Project',
-          schedule_interval='56 18 * * *',
-          start_date=datetime(2022, 11, 21), catchup=False, max_active_runs=1)
+          schedule_interval='00 05 * * *',
+          start_date=datetime(2022, 12, 1), catchup=False, max_active_runs=1)
 
-# ----------- Hadoop Filesystem Aufgaben ----------
+# ---Dags for Diff Cell Towers---
 
 create_download_dir_diff = BashOperator(
     task_id='create_import_dir',
@@ -74,11 +71,7 @@ pyspark_cell_towers_diff = SparkSubmitOperator(
     dag = dag
 )
 
-
-# ---------------------------------------------------------------------------------------------
-
-
-# -------------------- Workflow --------------------
+# ---Workflow---
 
 create_download_dir_diff >> download_cell_towers_diff >> unzip_cell_towers_diff
 unzip_cell_towers_diff >> create_hdfs_raw_dir_diff >> hdfs_put_cell_towers_diff >> pyspark_cell_towers_diff
