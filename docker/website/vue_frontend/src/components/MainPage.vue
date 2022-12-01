@@ -85,20 +85,22 @@ export default {
       for (let i in this.group){
         
         this.options.find(x => x.value === this.group[i]).loading = true;
-        this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+        fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
           .then(data =>  {
 
             this.options.find(x => x.value === this.group[i]).loading = false;
             if (data.data.length != 0){
-              return data.data
+              this.rows = this.rows.concat(data.data);
+              // return data.data
             }
             else{
-              return [{radio: this.options[i].value, distance: NaN}]
+              this.rows = this.rows.concat([{radio: this.options[i].value, distance: NaN}]);
+              // return [{radio: this.options[i].value, distance: NaN}]
             }
         
           }
-        ));
+        );
       }
     }
   },
