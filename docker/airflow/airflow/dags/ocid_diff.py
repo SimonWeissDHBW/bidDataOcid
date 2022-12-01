@@ -25,49 +25,42 @@ dag = DAG('cell_towers_add_diff_db', default_args=args, description='Project',
 
 # ----------- Hadoop Filesystem Aufgaben ----------
 
-create_local_import_dir = BashOperator(
+create_download_dir_diff = BashOperator(
     task_id='create_import_dir',
-    bash_command='mkdir -p /home/airflow/opencellid/raw',
+    bash_command='mkdir -p /home/airflow/opencellid/raw/diff',
     dag=dag,
 )
 
-clear_local_import_dir = ClearDirectoryOperator(
-    task_id='clear_import_dir',
-    directory='/home/airflow/opencellid/raw',
-    pattern='cell_towers.*',
-    dag=dag,
-)
-
-download_cell_towers = HttpDownloadOperator(
+download_cell_towers_diff = HttpDownloadOperator(
     task_id='download_cell_towers',
     download_uri='https://onedrive.live.com/download?cid=6CD9C3F4D2E50BCB&resid=6CD9C3F4D2E50BCB%2159291&authkey=ANu-4_qT3NxqPqo', #muss durch die offizielle URL getauscht werden!
-    save_to='/home/airflow/opencellid/raw/cell_towers_diff.csv.gz',
+    save_to='/home/airflow/opencellid/raw/diff/cell_towers_diff.csv.gz',
     dag=dag,
 )
 
-unzip_cell_towers = UnzipFileOperator(
+unzip_cell_towers_diff = UnzipFileOperator(
     task_id='unzip_cell_towers',
-    zip_file='/home/airflow/opencellid/raw/cell_towers_diff.csv.gz',
-    extract_to='/home/airflow/opencellid/raw/cell_towers_diff.csv',
+    zip_file='/home/airflow/opencellid/raw/diff/cell_towers_diff.csv.gz',
+    extract_to='/home/airflow/opencellid/raw/diff/cell_towers_diff.csv',
     dag=dag,
 )
 
-create_hdfs_cell_towers_partition_dir = HdfsMkdirFileOperator(
+create_hdfs_raw_dir_diff = HdfsMkdirFileOperator(
     task_id='create_hdfs_cell_towers_partition_dir',
-    directory='/user/hadoop/opencellid/raw',
+    directory='/user/hadoop/opencellid/raw/diff',
     hdfs_conn_id='hdfs',
     dag=dag,
 )
 
-hdfs_put_tower_cells = HdfsPutFileOperator(
+hdfs_put_cell_towers_diff = HdfsPutFileOperator(
     task_id='upload_tower_cells_to_hdfs',
-    local_file='/home/airflow/opencellid/raw/cell_towers_diff.csv',
-    remote_file='/user/hadoop/opencellid/raw/cell_towers_diff.csv',
+    local_file='/home/airflow/opencellid/raw/diff/cell_towers_diff.csv',
+    remote_file='/user/hadoop/opencellid/raw/diff/cell_towers_diff.csv',
     hdfs_conn_id='hdfs',
     dag=dag,
 )
 
-pyspark_cell_towers = SparkSubmitOperator(
+pyspark_cell_towers_diff = SparkSubmitOperator(
     task_id='pyspark_cell_towers',
     conn_id='spark',
     application='/home/airflow/airflow/python/pyspark_cell_towers.py',
@@ -77,7 +70,7 @@ pyspark_cell_towers = SparkSubmitOperator(
     num_executors='2',
     name='spark_cell_towers',
     verbose=True,
-    application_args=['--hdfs_source_dir', '/user/hadoop/opencellid/raw/', '--hdfs_target_dir', '/user/hadoop/opencellid/final', '--hdfs_target_format', 'csv', '--full_or_diff', 'diff'],
+    application_args=['--hdfs_source_dir', '/user/hadoop/opencellid/raw/diff/', '--hdfs_target_dir', '/user/hadoop/opencellid/final/diff', '--hdfs_target_format', 'csv', '--full_or_diff', 'diff'],
     dag = dag
 )
 
@@ -87,5 +80,5 @@ pyspark_cell_towers = SparkSubmitOperator(
 
 # -------------------- Workflow --------------------
 
-create_local_import_dir >> clear_local_import_dir >> download_cell_towers >> unzip_cell_towers
-unzip_cell_towers >> create_hdfs_cell_towers_partition_dir >> hdfs_put_tower_cells >> pyspark_cell_towers
+create_download_dir_diff >> download_cell_towers_diff >> unzip_cell_towers_diff
+unzip_cell_towers_diff >> create_hdfs_raw_dir_diff >> hdfs_put_cell_towers_diff >> pyspark_cell_towers_diff
