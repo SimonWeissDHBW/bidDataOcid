@@ -24,7 +24,7 @@ async function queryDB(sql, res) {
   db = await mysql_connector.createConnection((db_info))
 
   data = await db.execute(sql)
-  console.log(data)
+
   res.json({
     status: 200,
     data,
