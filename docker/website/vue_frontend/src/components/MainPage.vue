@@ -107,7 +107,7 @@ export default {
     async getAPI() {
 
       //Check if the user has entered valid coordinates
-      if (!( this.lon < -180 || this.lon > 180 || this.lat < -90 || this.lat > 90)) {
+      if (!( this.lon <= -180 || this.lon >= 180 || this.lat <= -90 || this.lat >= 90)) {
 
         this.rows = [];
         for (let i in this.group){
