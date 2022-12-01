@@ -85,24 +85,25 @@ export default {
       this.rows = [];
       for (let i in this.group){
         this.options[i].loading = true;
+
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
           this.options[i].loading = false;
-          console.log(data.data)
-          if (data.data){
+          if (data.data.length != 0){
             return data.data
           }
           else{
-            return {radio: this.options[i].value, distance: NaN}
+            return [{radio: this.options[i].value, distance: NaN}]
           }
         }));
+        
       }
     }
   },
 
   setup () {
-    const backGroundFunc =  ((row) =>  {return "bg-" + (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red"))})
+    const backGroundFunc =  ((row) =>  {return "bg-" + (row.distance.isNaN() ? "grey" : (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red")))})
     const columns = [
       { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
       { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
