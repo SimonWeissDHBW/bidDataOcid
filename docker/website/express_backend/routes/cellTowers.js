@@ -11,7 +11,17 @@ router.get('/:radio/:lonParam/:latParam', async function(req, res) {
   await queryDB(sql, res);
 });
 
+db_info = {
+  host : 'ocid',
+  user : 'root',
+  password  :'ocidBigData',
+  database : 'cell_towers'
+};
+
 async function queryDB(sql, res) {
+
+  db = await mysql_connector.createConnection((db_info))
+
   data = await db.execute(sql)
   console.log(data)
   res.json({
