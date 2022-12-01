@@ -12,39 +12,60 @@
       </q-table>
     </div>
     <div style="display:flex; flex-direction: column; align-items: center; width: 40%;">
-      <q-input color="orange" standout bottom-slots v-model="lon" label="Longitude">
-        <template v-slot:prepend>
-          <q-icon name="place" />
-        </template>
-      </q-input>
-      <q-input color="orange" standout bottom-slots v-model="lat" label="Latitude">
-        <template v-slot:prepend>
-          <q-icon name="place" />
-        </template>
-      </q-input>
-      <div class="q-pa-lg" style="display:flex; flex-direction: column; align-items: center;">
-        <q-option-group
-          v-model="group"
-          :options="options"
-          color="orange"
-          center-label
-          type="toggle"
+      <form 
+        style="display:flex; flex-direction: column; align-items: center; width: 100%;"
+        @submit.prevent.stop="getAPI" class="q-gutter-md"
+      >
+        <q-input 
+          ref="lonRef"
+          color="orange" 
+          standout 
+          bottom-slots 
+          v-model="lon" 
+          label="Longitude"
+          :rules="[val => (val > -180 && val < 180) || 'Longitude must be between -180 and 180']"
         >
-        <template v-slot:label="options">
-        <div class="row items-center">
-          <span>{{ options.label }}</span>
-          <q-spinner-comment
+          <template v-slot:prepend>
+            <q-icon name="place" />
+          </template>
+        </q-input>
+        <q-input 
+          ref="latRef"
+          color="orange" 
+          standout 
+          bottom-slots 
+          v-model="lat" 
+          label="Latitude"
+          :rules="[val => (val > -90 && val < 90) || 'Latitude must be between -90 and 90']"
+        >
+          <template v-slot:prepend>
+            <q-icon name="place" />
+          </template>
+        </q-input>
+        <div class="q-pa-lg" style="display:flex; flex-direction: column; align-items: center;">
+          <q-option-group
+            v-model="group"
+            :options="options"
             color="orange"
-            size="3em"
-            :thickness="2"
-            v-if="options.loading" 
-            style="padding: 5px;"
-          />
+            center-label
+            type="toggle"
+          >
+          <template v-slot:label="options">
+          <div class="row items-center">
+            <span>{{ options.label }}</span>
+            <q-spinner-comment
+              color="orange"
+              size="3em"
+              :thickness="2"
+              v-if="options.loading" 
+              style="padding: 5px;"
+            />
+          </div>
+        </template>
+        </q-option-group>
         </div>
-      </template>
-      </q-option-group>
-      </div>
-      <q-btn color="primary" label="Get Cell Data" @click="getAPI()" />
+        <q-btn type="submit" color="primary" label="Get Cell Data"/>
+      </form>
     </div>
   </div>
 </template>
@@ -56,6 +77,16 @@
 import { ref } from 'vue'
 
 export default {
+  setup () {
+    const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 250 ? "green" : (row.distance < 500 ? "orange" : "red")))})
+    const columns = [
+      { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
+      { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
+    ]
+    return {
+      columns,
+    }
+  },
   name: 'MainPage',
   data() {
     return {
@@ -74,32 +105,27 @@ export default {
 
   methods: {
     async getAPI() {
-      this.rows = [];
-      for (let i in this.group){
-        
-        this.options.find(x => x.value === this.group[i]).loading = true;
-        fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
-        .then(response => response.json())
-          .then(data =>  {
 
-            this.options.find(x => x.value === this.group[i]).loading = false;
-            let tempDistance = (data.data[0].length != 0) ? Math.round(data.data[0]) : NaN;
-            this.rows = this.rows.concat([{radio: this.group[i], distance: tempDistance}]);
+      //Check if the user has entered valid coordinates
+      if (!( this.lon < -180 || this.lon > 180 || this.lat < -90 || this.lat > 90)) {
 
-          }
-        );
+        this.rows = [];
+        for (let i in this.group){
+          
+          this.options.find(x => x.value === this.group[i]).loading = true;
+          fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+          .then(response => response.json())
+            .then(data =>  {
+
+              this.options.find(x => x.value === this.group[i]).loading = false;
+              let tempDistance = (data.data[0].length != 0) ? Math.round(data.data[0]) : "N/A";
+              this.rows = this.rows.concat([{radio: this.group[i], distance: tempDistance}]);
+
+            }
+          );
+        }
+
       }
-    }
-  },
-
-  setup () {
-    const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 250 ? "green" : (row.distance < 500 ? "orange" : "red")))})
-    const columns = [
-      { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
-      { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
-    ]
-    return {
-      columns,
     }
   }
 }
