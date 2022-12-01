@@ -1,5 +1,7 @@
+const mysql_connector = require('mysql2/promise')
 const express = require('express'),
-  router = express.Router();
+router = express.Router();
+
 
 router.get('/:radio/:lonParam/:latParam', async function(req, res) {
 
