@@ -67,10 +67,10 @@ if __name__ == '__main__':
         .partitionBy("radio")\
         .saveAsTable("default")\
 
-    df_lte = spark.read.parquet(args.hdfs_target_dir + "radio=LTE")
-    df_cdma = spark.read.parquet(args.hdfs_target_dir + "radio=CDMA")
-    df_gsm = spark.read.parquet(args.hdfs_target_dir + "radio=GSM")
-    df_umts = spark.read.parquet(args.hdfs_target_dir + "radio=UMTS")
+    df_lte = spark.read.parquet(args.hdfs_target_dir + "/radio=LTE")
+    df_cdma = spark.read.parquet(args.hdfs_target_dir + "/radio=CDMA")
+    df_gsm = spark.read.parquet(args.hdfs_target_dir + "/radio=GSM")
+    df_umts = spark.read.parquet(args.hdfs_target_dir + "/radio=UMTS")
 
     df_partioned_by_radio = [[df_lte, "LTE"], [df_cdma, "CDMA"], [df_gsm, "GSM"], [df_umts,"UMTS"]]
 
