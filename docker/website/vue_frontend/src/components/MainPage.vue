@@ -81,7 +81,7 @@ export default {
     const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 250 ? "green" : (row.distance < 500 ? "orange" : "red")))})
     const columns = [
       { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
-      { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
+      { name: 'distance', label: 'Distance (in meters)', field: 'distance', sortable: true, classes: backGroundFunc},
     ]
     return {
       columns,
