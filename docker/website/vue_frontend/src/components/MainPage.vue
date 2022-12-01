@@ -90,23 +90,9 @@ export default {
           .then(data =>  {
 
             this.options.find(x => x.value === this.group[i]).loading = false;
-            if (data.data[0].length != 0){
-              console.log("Data found.");
-              console.log(data.data[0]);
-              console.log(this.rows)
-              this.rows = this.rows.concat(data.data[0]);
-              console.log(this.rows);
-              // return data.data
-            }
-            else{
-              console.log("No data found");
-              console.log(data.data[0]);
-              console.log(this.rows)
-              this.rows = this.rows.concat([{radio: this.options[i].value, distance: NaN}]);
-              console.log(this.rows);
-              // return [{radio: this.options[i].value, distance: NaN}]
-            }
-        
+            let tempDistance = (data.data[0].length != 0) ? Math.round(data.data[0]) : NaN;
+            this.rows = this.rows.concat([{radio: this.group[i], distance: tempDistance}]);
+            
           }
         );
       }
@@ -114,7 +100,7 @@ export default {
   },
 
   setup () {
-    const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red")))})
+    const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 250 ? "green" : (row.distance < 500 ? "orange" : "red")))})
     const columns = [
       { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
       { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
