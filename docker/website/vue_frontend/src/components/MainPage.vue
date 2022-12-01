@@ -67,7 +67,6 @@ export default {
   data() {
     return {
       rows: [],
-      test: 0,
       lon: 0.0,
       lat: 0.0,
       group: ref(['UMTS']),
@@ -84,26 +83,28 @@ export default {
     async getAPI() {
       this.rows = [];
       for (let i in this.group){
-        this.options[i].loading = true;
-
+        
+        this.options.find(x => x.value === this.group[i]).loading = true;
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
-        .then(data =>  {
-          this.options[i].loading = false;
-          if (data.data.length != 0){
-            return data.data
-          }
-          else{
-            return [{radio: this.options[i].value, distance: NaN}]
-          }
-        }));
+          .then(data =>  {
+
+            this.options.find(x => x.value === this.group[i]).loading = false;
+            if (data.data.length != 0){
+              return data.data
+            }
+            else{
+              return [{radio: this.options[i].value, distance: NaN}]
+            }
         
+          }
+        ));
       }
     }
   },
 
   setup () {
-    const backGroundFunc =  ((row) =>  {return "bg-" + (row.distance.isNaN() ? "grey" : (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red")))})
+    const backGroundFunc =  ((row) =>  {return "bg-" + (isNaN(row.distance) ? "grey" : (row.distance < 500 ? "green" : (row.distance < 1000 ? "orange" : "red")))})
     const columns = [
       { name: 'radio', label: 'Radio Type', field: 'radio', sortable: true, classes: backGroundFunc},
       { name: 'distance', label: 'Distance', field: 'distance', sortable: true, classes: backGroundFunc},
