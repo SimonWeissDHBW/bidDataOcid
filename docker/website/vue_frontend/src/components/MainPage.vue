@@ -38,7 +38,7 @@
         <div class="row items-center">
           <span>{{ options.label }}</span>
           <q-spinner-comment
-            color="primary"
+            color="orange"
             size="3em"
             :thickness="2"
             v-if="options.loading" 
@@ -82,12 +82,14 @@ export default {
 
   methods: {
     async getAPI() {
+      this.rows = [];
       for (let i in this.group){
         this.options[i].loading = true;
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
           this.options[i].loading = false;
+          console.log(data.data)
           if (data.data){
             return data.data
           }
