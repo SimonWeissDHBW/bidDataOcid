@@ -60,13 +60,6 @@ if __name__ == '__main__':
         .dropDuplicates()\
         .select("radio", "lat", "lon", "range")\
         .repartition('radio')\
-
-    df_lte = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "LTE")
-    df_cdma = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "CDMA")
-    df_gsm = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "GSM")
-    df_umts = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "UMTS")
-
-    df_partioned_by_radio = [[df_lte, "LTE"], [df_cdma, "CDMA"], [df_gsm, "GSM"], [df_umts,"UMTS"]]
     
     cell_tower_dataframe\
         .write.format("parquet")\
@@ -74,9 +67,12 @@ if __name__ == '__main__':
         .partitionBy("radio")\
         .saveAsTable("default")\
 
-    cell_tower_dataframe = cell_tower_dataframe.select("radio", "lat", "lon", "range")
+    df_lte = spark.read.parquet(args.hdfs_target_dir + "radio=LTE")
+    df_cdma = spark.read.parquet(args.hdfs_target_dir + "radio=CDMA")
+    df_gsm = spark.read.parquet(args.hdfs_target_dir + "radio=GSM")
+    df_umts = spark.read.parquet(args.hdfs_target_dir + "radio=UMTS")
 
-    print("MOINSEN")
+    df_partioned_by_radio = [[df_lte, "LTE"], [df_cdma, "CDMA"], [df_gsm, "GSM"], [df_umts,"UMTS"]]
 
     for df_radio in df_partioned_by_radio:
         df_radio[0].write.format('jdbc').options(
