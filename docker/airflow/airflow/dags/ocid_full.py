@@ -51,7 +51,7 @@ create_hdfs_raw_dir_full = HdfsMkdirFileOperator(
 
 hdfs_put_cell_towers_full = HdfsPutFileOperator(
     task_id='upload_tower_cells_to_hdfs',
-    local_file='/home/airflow/opencellid/raw/cell_towers_full.csv',
+    local_file='/home/airflow/opencellid/raw/full/cell_towers_full.csv',
     remote_file='/user/hadoop/opencellid/raw/full/cell_towers_full.csv',
     hdfs_conn_id='hdfs',
     dag=dag,
