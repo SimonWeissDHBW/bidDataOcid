@@ -56,16 +56,10 @@ if __name__ == '__main__':
         .load(args.hdfs_source_dir + fileName)
         
     cell_tower_dataframe = cell_tower_dataframe\
-        .repartition('radio')\
-        .select("radio", "lat", "lon", "range")\
-        .dropDuplicates()\
         .dropna()\
-        # .filter((
-        #     (cell_tower_dataframe.radio == "LTE") |
-        #     (cell_tower_dataframe.radio == "CDMA") |
-        #     (cell_tower_dataframe.radio == "GSM") |
-        #     (cell_tower_dataframe.radio == "UTMS") 
-        # ))\
+        .dropDuplicates()\
+        .select("radio", "lat", "lon", "range")\
+        .repartition('radio')\
 
     df_lte = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "LTE")
     df_cdma = cell_tower_dataframe.filter(cell_tower_dataframe.radio == "CDMA")
@@ -74,15 +68,11 @@ if __name__ == '__main__':
 
     df_partioned_by_radio = [[df_lte, "LTE"], [df_cdma, "CDMA"], [df_gsm, "GSM"], [df_umts,"UMTS"]]
     
-    # cell_tower_dataframe = cell_tower_dataframe.where()
-
     cell_tower_dataframe\
         .write.format("parquet")\
         .mode(writeMode).option("path", args.hdfs_target_dir)\
         .partitionBy("radio")\
         .saveAsTable("default")\
-
-        # 
 
     cell_tower_dataframe = cell_tower_dataframe.select("radio", "lat", "lon", "range")
 

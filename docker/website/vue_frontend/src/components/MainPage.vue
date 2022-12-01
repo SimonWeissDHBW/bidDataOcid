@@ -33,7 +33,20 @@
           color="orange"
           center-label
           type="toggle"
-        />
+        >
+        <template v-slot:label="options">
+        <div class="row items-center">
+          <span class="text-teal">{{ options.label }}</span>
+          <q-spinner-comment
+            color="primary"
+            size="3em"
+            :thickness="2"
+            v-if="options.loading" 
+            style="padding: 5px;"
+          />
+        </div>
+      </template>
+      </q-option-group>
       </div>
 
       <q-btn color="primary" label="Get Cell Data" @click="getAPI()" />
@@ -59,10 +72,10 @@ export default {
       lat: 0.0,
       group: ref(['UMTS']),
       options: [
-        {label : 'UMTS', value: 'UMTS'},
-        {label : 'LTE', value: 'LTE'},
-        {label : 'GSM', value: 'GSM'},
-        {label : 'CDMA', value: 'CDMA'},
+        {label : 'UMTS', value: 'UMTS', loading: false},
+        {label : 'LTE', value: 'LTE', loading: false},
+        {label : 'GSM', value: 'GSM', loading: false},
+        {label : 'CDMA', value: 'CDMA', loading: false},
       ],
     }
   },
@@ -70,9 +83,11 @@ export default {
   methods: {
     async getAPI() {
       for (let i in this.group){
-        this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+        this.options[i].loading = true;
+        this.rows = this.rows.concat(fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
+          this.group[i].loading = false;
           return data.data
         }));
       }
