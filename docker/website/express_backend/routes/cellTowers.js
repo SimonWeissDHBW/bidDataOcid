@@ -12,14 +12,12 @@ router.get('/:radio/:lonParam/:latParam', async function(req, res) {
 });
 
 async function queryDB(sql, res) {
-  await db.query(sql, function(err, data, fields) {
-    if (err) throw err;
-    console.log("Success");
-    res.json({
-      status: 200,
-      data,
-      message: "Cell_towers lists retrieved successfully"
-    })
+  data = await db.execute(sql)
+  console.log(data)
+  res.json({
+    status: 200,
+    data,
+    message: "Cell_towers lists retrieved successfully"
   })
 };
 
