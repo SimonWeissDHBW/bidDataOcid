@@ -91,11 +91,19 @@ export default {
 
             this.options.find(x => x.value === this.group[i]).loading = false;
             if (data.data.length != 0){
+              console.log("Data found.");
+              console.log(data.data);
+              console.log(this.rows)
               this.rows = this.rows.concat(data.data);
+              console.log(this.rows);
               // return data.data
             }
             else{
+              console.log("No data found");
+              console.log(data.data);
+              console.log(this.rows)
               this.rows = this.rows.concat([{radio: this.options[i].value, distance: NaN}]);
+              console.log(this.rows);
               // return [{radio: this.options[i].value, distance: NaN}]
             }
         
