@@ -30,7 +30,7 @@ create_download_dir_diff = BashOperator(
 
 download_cell_towers_diff = HttpDownloadOperator(
     task_id='download_cell_towers',
-    download_uri='https://opencellid.org/ocid/downloads?token=pk.fda3225a822fea93e9da4e4c6ba0c9ed&type=diff&file=OCID-diff-cell-export-{{ds}}-T000000.csv.gz', #muss durch die offizielle URL getauscht werden!
+    download_uri='https://opencellid.org/ocid/downloads?token=pk.fda3225a822fea93e9da4e4c6ba0c9ed&type=diff&file=OCID-diff-cell-export-{{ds}}-T000000.csv.gz',
     save_to='/home/airflow/opencellid/raw/diff/cell_towers_diff.csv.gz',
     dag=dag,
 )
