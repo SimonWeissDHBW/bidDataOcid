@@ -119,7 +119,7 @@ export default {
 
               console.log(data.data);
               this.options.find(x => x.value === this.group[i]).loading = false;
-              let tempDistance = (data.data[0].length != 0) ? Math.round(data.data[0][0].distance) : "N/A";
+              let tempDistance = (data.data[0][0].distance != null) ? Math.round(data.data[0][0].distance) : "N/A";
               console.log(tempDistance);
               this.rows = this.rows.concat([{radio: this.group[i], distance: tempDistance}]);
 
