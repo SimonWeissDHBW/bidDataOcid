@@ -87,8 +87,13 @@ export default {
         this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
-          this.group[i].loading = false;
-          return data.data
+          this.options[i].loading = false;
+          if (data.data){
+            return data.data
+          }
+          else{
+            return {radio: this.options[i].value, distance: NaN}
+          }
         }));
       }
     }
