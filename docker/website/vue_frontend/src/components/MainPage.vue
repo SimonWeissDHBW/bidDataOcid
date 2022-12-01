@@ -36,7 +36,7 @@
         >
         <template v-slot:label="options">
         <div class="row items-center">
-          <span class="text-teal">{{ options.label }}</span>
+          <span>{{ options.label }}</span>
           <q-spinner-comment
             color="primary"
             size="3em"
@@ -84,7 +84,7 @@ export default {
     async getAPI() {
       for (let i in this.group){
         this.options[i].loading = true;
-        this.rows = this.rows.concat(fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
+        this.rows = this.rows.concat(await fetch("http://"+ self.location.host + "/cellTowers/" + this.group[i] + "/" + this.lon + "/" + this.lat)
         .then(response => response.json())
         .then(data =>  {
           this.group[i].loading = false;
